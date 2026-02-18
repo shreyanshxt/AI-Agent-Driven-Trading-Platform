@@ -1,63 +1,262 @@
-# FinSight: AI-Agent Driven Trading Platform 📈🤖
+<div align="center">
 
-| Analysis View | Portfolio & Account View |
-|---------------|--------------------------|
+# 🤖 FinSight AI Trading Agent
+
+### *An Autonomous, LLM-Powered Trading Platform with Real-Time Market Intelligence*
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-black?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.com)
+[![Alpaca](https://img.shields.io/badge/Alpaca-Paper_Trading-FFCD00?style=for-the-badge)](https://alpaca.markets)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+</div>
+
+---
+
+## 📸 Dashboard Preview
+
+| 🔍 Live Analysis View | 💼 Portfolio & Account View |
+|:---:|:---:|
 | ![Analysis View](assets/analysis_view.png) | ![Portfolio View](assets/portfolio_view.png) |
 
-FinSight is a state-of-the-art, autonomous trading platform powered by Local LLMs and real-time market data. It combines advanced financial analysis with autonomous trade execution, providing a seamless bridge between complex market signals and actionable trades.
+---
+
+## 🧭 About
+
+**FinSight** is a full-stack, autonomous AI trading agent that bridges the gap between complex financial data and actionable trading decisions. It leverages **local Large Language Models** (via Ollama) to analyze real-time market data, generate intelligent `BUY`, `SELL`, or `HOLD` signals, and autonomously execute trades — all from a sleek, dark-mode dashboard.
+
+Whether you're a developer exploring AI in finance, a quant researcher, or just curious about autonomous agents, FinSight provides a complete, production-ready platform to experiment with.
+
+> **⚠️ Disclaimer**: FinSight is designed for **paper trading and educational purposes only**. It does not constitute financial advice. Always do your own research before making real investment decisions.
+
+---
 
 ## ✨ Features
 
-### 🧠 AI-Driven Analysis
-- **Autonomous Decision Making**: Uses Local LLMs (via Ollama) to analyze technical indicators and news sentiment.
-* **Signal Generation**: Produces clear `BUY`, `SELL`, or `HOLD` signals with deep reasoning.
-- **Dynamic Context**: Integrates real-time price history and technical indicators (RSI, MACD, Bollinger Bands).
+<details>
+<summary><b>🧠 AI-Driven Market Analysis</b></summary>
 
-### 📊 Interactive Dashboard
-- **Glassmorphic UI**: A premium, modern interface with dark mode and vibrant accents.
-- **3D Global Visualization**: Visualize global headquarters and market activity on a rotating 3D globe.
-- **Real-time Portfolio Tracking**: Monitor equity curves, buying power, and detailed position management.
-- **Live Activity Feed**: Real-time notifications of agent analysis and executed trades.
+- **Local LLM Integration**: Powered by [Ollama](https://ollama.com), supporting models like `llama3.1`, `mistral`, `gemma`, and more — all running **100% locally** with no data sent to external AI APIs.
+- **Intelligent Signal Generation**: The AI synthesizes technical indicators, price history, and live news to produce clear `BUY`, `SELL`, or `HOLD` signals with detailed reasoning.
+- **News Sentiment Analysis**: Fetches and incorporates the latest financial news for each ticker into the analysis context.
+- **Multi-Model Support**: Seamlessly switch between different LLM models from the dashboard without restarting the server.
+- **Structured Reasoning**: Every decision comes with a human-readable explanation of *why* the signal was generated.
 
-### ⚡ Technical Excellence
-- **Hybrid Execution**: Supports both Alpaca (Paper Trading) and a robust Local Simulation mode.
-- **Parallel Backtesting**: Analyze historical data while maintaining live monitoring.
-- **Microservice Architecture**: Built with FastAPI for high performance and scalability.
-- **Reliable Persistence**: JSON-based state management with file locking for data integrity.
+</details>
+
+<details>
+<summary><b>📊 Interactive Real-Time Dashboard</b></summary>
+
+- **Premium Dark UI**: A glassmorphic, dark-mode interface with vibrant cyan/teal accents built for professional use.
+- **3D Globe Visualization**: An interactive, rotating 3D Earth that visualizes company headquarters locations and global market activity.
+- **Live Price Charts**: Switchable chart views for **Price History**, **RSI**, and **MACD** with smooth animations.
+- **Technical Indicator Cards**: At-a-glance cards for RSI(14), MACD Signal, SMA/EMA(20), and Mid-Term SMA(50) with interpretive labels (e.g., "Oversold - potential buy").
+- **AI Activity Feed**: A live, scrolling feed of all agent analysis and trade execution notifications.
+- **Quick-Select Tickers**: One-click access to popular tickers: AAPL, GOOGL, MSFT, TSLA, NVDA, BTC, ETH, AMZN.
+
+</details>
+
+<details>
+<summary><b>💼 Portfolio & Account Management</b></summary>
+
+- **Dual Portfolio View**: Toggle between **Total Portfolio** (all positions) and **Agent Only** (AI-managed positions) views.
+- **Real-Time P&L Tracking**: Live unrealized profit/loss calculation for every open position, updated on every price refresh.
+- **Key Metrics Dashboard**: Net Equity, Buying Power, Cash, Net Profit, Net Loss, and Max Drawdown — all in one view.
+- **Open Positions Table**: Detailed table showing Symbol, Quantity, Average Entry Price, Current Price, P&L ($), and P&L (%) for all holdings.
+- **Equity Curve**: Historical performance chart showing portfolio growth over time.
+
+</details>
+
+<details>
+<summary><b>🤖 Autonomous Trading Agent</b></summary>
+
+- **Continuous Monitoring Loop**: The agent runs a configurable monitoring cycle (default: 30s) across a customizable watchlist.
+- **Autonomous Trade Execution**: When enabled, the agent automatically places orders based on its analysis — no human intervention needed.
+- **Smart Capital Allocation**: Uses 20% of available agent cash per BUY trade for diversified exposure.
+- **Holdings-Aware Selling**: SELL signals correctly liquidate the agent's actual position in that ticker, not a cash-calculated quantity.
+- **Agent Capital Isolation**: A dedicated sub-portfolio tracks the agent's allocated capital separately from the main account.
+- **Configurable via UI**: Enable/disable autonomous mode and set agent capital allocation directly from the dashboard.
+
+</details>
+
+<details>
+<summary><b>⚡ Hybrid Trading Execution</b></summary>
+
+- **Alpaca Paper Trading**: Connects to [Alpaca Markets](https://alpaca.markets) for realistic paper trading with real market prices and order management.
+- **Local Simulation Mode**: A fully self-contained simulation engine that activates automatically when Alpaca keys are absent — no external dependencies needed.
+- **Strategy Engine**: Supports multiple trading strategies: `market`, `momentum`, `mean_reversion`, `breakout`, and `ai_optimized`.
+- **Order Management**: View and track pending orders in real-time.
+- **Trade History Log**: Every trade (manual or agent-executed) is logged with timestamp, price, quantity, and source.
+
+</details>
+
+<details>
+<summary><b>🔧 Technical Architecture</b></summary>
+
+- **FastAPI Backend**: High-performance async REST API with automatic Swagger documentation at `/docs`.
+- **File-Locked State Management**: Uses `fcntl` file locking to prevent race conditions when multiple processes (agent + API) write to the portfolio simultaneously.
+- **Real-Time Price Refresh**: Market prices are fetched from `yfinance` on every account info request, keeping P&L always current.
+- **Dual Data Sources**: `yfinance` for OHLCV data and `AlphaVantage` for technical indicators, with automatic fallback.
+- **Dockerized Deployment**: Single `docker-compose up` command to launch the entire stack.
+- **CORS-Enabled**: Ready for frontend integration from any origin.
+
+</details>
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Python 3.10+, FastAPI, Uvicorn |
+| **AI / LLM** | Ollama (llama3.1, mistral, gemma) |
+| **Market Data** | yfinance, AlphaVantage API |
+| **Trading** | Alpaca Markets API (Paper Trading) |
+| **Frontend** | Vanilla HTML/CSS/JS, Three.js (Globe) |
+| **Deployment** | Docker, Docker Compose |
+| **State** | JSON with fcntl file locking |
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
-2. [Ollama](https://ollama.com/) installed and running locally (`ollama serve`).
-3. (Optional) AlphaVantage API Key (for indicator data).
-4. (Optional) Alpaca API Keys (for paper trading).
-
-### Installation & Deployment
-
-1. **Clone and Configure**
+1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+2. [Ollama](https://ollama.com/) installed with at least one model pulled:
    ```bash
-   git clone https://github.com/shreyanshxt/AI-Agent-Driven-Trading-Platform.git
-   cd AI-Agent-Driven-Trading-Platform
-   cp .env.example .env
-   # Edit .env with your API keys
+   ollama pull llama3.1
+   ollama serve
    ```
+3. *(Optional)* [AlphaVantage API Key](https://www.alphavantage.co/support/#api-key) — free tier available.
+4. *(Optional)* [Alpaca Paper Trading Keys](https://alpaca.markets) — free account required.
 
-2. **Launch with Docker**
-   ```bash
-   docker-compose up --build
-   ```
+### Installation
 
-3. **Interact**
-   - **Dashboard**: [http://localhost:8000](http://localhost:8000)
-   - **API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+```bash
+# 1. Clone the repository
+git clone https://github.com/shreyanshxt/AI-Agent-Driven-Trading-Platform.git
+cd AI-Agent-Driven-Trading-Platform
 
-## 🛠 Project Structure
-- `app/main.py`: Core FastAPI application and endpoints.
-- `app/services/agent_brain.py`: The "brain" of the autonomous agent.
-- `app/services/trading_service.py`: Multi-mode trading execution layer.
-- `app/services/llm_engine.py`: LLM integration and prompt engineering.
-- `app/services/data_fetcher.py`: Real-time market data and indicator fetching.
+# 2. Configure environment
+cp .env.example .env
+# Edit .env and add your API keys (optional but recommended)
+
+# 3. Launch with Docker
+docker-compose up --build
+```
+
+### Without Docker
+
+```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the API server
+uvicorn app.main:app --reload
+
+# In a separate terminal, start the autonomous agent
+python3 start_agent.py
+```
+
+### Access the Platform
+| Service | URL |
+|---|---|
+| **Dashboard** | http://localhost:8000 |
+| **API Docs (Swagger)** | http://localhost:8000/docs |
+| **Health Check** | http://localhost:8000/health |
 
 ---
-*Built with ❤️ by [Shreyansh Singh](https://github.com/shreyanshxt)*
+
+## 📁 Project Structure
+
+```
+finsight_agent/
+├── app/
+│   ├── main.py                  # FastAPI app, all API endpoints
+│   └── services/
+│       ├── agent_brain.py       # Autonomous agent loop & decision logic
+│       ├── trading_service.py   # Alpaca + Simulation trading engine
+│       ├── llm_engine.py        # LLM prompt engineering & analysis
+│       ├── llm_providers.py     # Ollama / Gemini provider abstraction
+│       ├── data_fetcher.py      # yfinance + AlphaVantage data layer
+│       ├── tools.py             # Agent tools (news fetching, etc.)
+│       └── notifier.py          # Notification service
+├── assets/                      # Dashboard screenshots
+├── finsight_dashboard.html      # Single-file frontend dashboard
+├── start_agent.py               # Entry point for the autonomous agent
+├── docker-compose.yml           # Docker orchestration
+├── Dockerfile                   # Container definition
+├── requirements.txt             # Python dependencies
+└── .env.example                 # Environment variable template
+```
+
+---
+
+## 🔌 API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Serve the dashboard |
+| `GET` | `/health` | Health check |
+| `GET` | `/account` | Full account info + positions + agent portfolio |
+| `POST` | `/analyze` | Run LLM analysis on a ticker |
+| `POST` | `/trade` | Execute a manual trade |
+| `GET` | `/trades` | Get full trade history |
+| `GET` | `/performance` | Get equity curve history |
+| `GET` | `/agent/config` | Get agent configuration |
+| `POST` | `/agent/config` | Update agent config (model, watchlist, capital) |
+| `POST` | `/agent/allocation` | Set agent capital allocation |
+
+---
+
+## ⚙️ Configuration
+
+Edit `agent_config.json` or use the dashboard UI to configure:
+
+```json
+{
+    "autonomous_enabled": true,
+    "model": "llama3.1",
+    "watchlist": ["AAPL", "NVDA", "TSLA", "BTC-USD"],
+    "agent_capital": 5000.0
+}
+```
+
+---
+
+## 🗺 Roadmap
+
+- [ ] WebSocket support for real-time dashboard updates
+- [ ] Multi-agent support with different strategies running in parallel
+- [ ] Backtesting engine integration
+- [ ] Email/SMS notifications for trade alerts
+- [ ] Support for options and crypto derivatives
+- [ ] Risk management rules (stop-loss, take-profit)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Shreyansh Singh](https://github.com/shreyanshxt)**
+
+⭐ Star this repo if you found it useful!
+
+</div>
