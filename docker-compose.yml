@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - ALPHAVANTAGE_API_KEY=${ALPHAVANTAGE_API_KEY}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

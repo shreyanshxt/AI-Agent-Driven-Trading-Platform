@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+.env
+
+# Logs
+*.log
+uvicorn.log
+ollama.log
+server.log
+agent_activity.log
+
+# Data/State
+simulated_portfolio.json
+performance_history.json
+trade_history.json
+agent_config.json
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

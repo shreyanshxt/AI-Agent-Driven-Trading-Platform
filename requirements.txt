@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+yfinance
+alpha_vantage
+requests
+pydantic
+python-dotenv
+openai
+alpaca-trade-api
+google-generativeai
