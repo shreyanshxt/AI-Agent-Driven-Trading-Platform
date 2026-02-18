@@ -1,7 +1,5 @@
 # FinSight: AI-Agent Driven Trading Platform 📈🤖
 
-![FinSight Dashboard](assets/dashboard.png)
-
 FinSight is a state-of-the-art, autonomous trading platform powered by Local LLMs and real-time market data. It combines advanced financial analysis with autonomous trade execution, providing a seamless bridge between complex market signals and actionable trades.
 
 ## ✨ Features
