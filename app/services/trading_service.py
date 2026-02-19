@@ -207,7 +207,15 @@ class TradingService:
         """
         if self.mode == "ALPACA":
             try:
-                # Alpaca expects qty as float or string for fractional? No, REST v2 usually int or string for whole.
+                # Get avg entry price before selling to calculate realized P&L for history
+                avg_entry = 0
+                if side.lower() == "sell":
+                    try:
+                        alp_pos = self.api.get_position(symbol)
+                        avg_entry = float(alp_pos.avg_entry_price)
+                    except:
+                        pass
+
                 order = self.api.submit_order(
                     symbol=symbol,
                     qty=qty,
@@ -222,6 +230,8 @@ class TradingService:
                 price_data = mkt.get_market_data(symbol)
                 current_price = price_data.get("price_data", {}).get("current_price", 0)
 
+                realized_pl = (current_price - avg_entry) * qty if side.lower() == "sell" and avg_entry > 0 else None
+
                 # Manual logging for Alpaca trades so they show in UI
                 trade_entry = {
                     "timestamp": datetime.now().isoformat(),
@@ -230,7 +240,8 @@ class TradingService:
                     "qty": qty,
                     "price": current_price,
                     "source": source,
-                    "mode": "alpaca"
+                    "mode": "alpaca",
+                    "realized_pl": realized_pl
                 }
                 self._log_trade(trade_entry)
 
@@ -267,6 +278,7 @@ class TradingService:
                     return {"error": f"Agent insufficient funds. Cash: ${agent_cash:.2f}, Cost: ${cost:.2f}"}
 
             # --- MAIN ACCOUNT ---
+            realized_pl = None
             if side.lower() == "buy":
                 if state["cash"] < cost:
                     return {"error": "Insufficient buying power (Simulated)"}
@@ -286,6 +298,9 @@ class TradingService:
                 pos = state["positions"].get(symbol)
                 if not pos or pos["qty"] < qty:
                     return {"error": f"Not enough shares of {symbol} to sell (Simulated)"}
+                
+                # Calculate Realized PL
+                realized_pl = (price - pos["avg_entry_price"]) * qty
                 
                 state["cash"] += cost
                 pos["qty"] -= qty
@@ -354,7 +369,8 @@ class TradingService:
             "side": side,
             "qty": qty,
             "price": price,
-            "source": source
+            "source": source,
+            "realized_pl": realized_pl
         }
         self._log_trade(trade_entry)
         

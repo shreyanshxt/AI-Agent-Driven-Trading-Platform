@@ -1305,12 +1305,13 @@
                 <th>SIDE</th>
                 <th>QTY</th>
                 <th>PRICE</th>
+                <th>REALIZED P&L</th>
                 <th>SOURCE</th>
               </tr>
             </thead>
             <tbody id="tradeHistoryList">
               <tr>
-                <td colspan="6" style="text-align:center; color:var(--muted); padding:30px">No trades recorded.</td>
+                <td colspan="7" style="text-align:center; color:var(--muted); padding:30px">No trades recorded.</td>
               </tr>
             </tbody>
           </table>
@@ -1530,7 +1531,7 @@
         const trades = await res.json();
 
         if (!trades || trades.length === 0) {
-          list.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:30px">No trades recorded.</td></tr>`;
+          list.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:30px">No trades recorded.</td></tr>`;
           return;
         }
 
@@ -1551,6 +1552,9 @@
               <td class="${cls}" style="font-weight:bold">${t.side.toUpperCase()}</td>
               <td>${t.qty}</td>
               <td>$${Number(t.price).toFixed(2)}</td>
+              <td class="${t.realized_pl >= 0 ? 'pl-up' : 'pl-down'}" style="font-family: var(--mono); font-weight: bold">
+                ${t.realized_pl !== null && t.realized_pl !== undefined ? (t.realized_pl >= 0 ? '+' : '') + '$' + Number(t.realized_pl).toFixed(2) : '—'}
+              </td>
               <td style="font-family: var(--mono); font-size: 0.7rem; font-weight: bold; ${sourceCls}">${sourceLabel}</td>
             </tr>
           `;
