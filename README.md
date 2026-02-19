@@ -41,6 +41,7 @@ Whether you're a developer exploring AI in finance, a quant researcher, or just 
 - **Local LLM Integration**: Powered by [Ollama](https://ollama.com), supporting models like `llama3.1`, `mistral`, `gemma`, and more — all running **100% locally** with no data sent to external AI APIs.
 - **Intelligent Signal Generation**: The AI synthesizes technical indicators, price history, and live news to produce clear `BUY`, `SELL`, or `HOLD` signals with detailed reasoning.
 - **News Sentiment Analysis**: Fetches and incorporates the latest financial news for each ticker into the analysis context.
+- **Risk Assessment**: The AI now generates a **Risk Score (1-10)** and a **Suggested Stop-Loss** for every trade, ensuring defensive positioning.
 - **Structured Reasoning**: Every decision comes with a human-readable explanation of *why* the signal was generated.
 
 ### 🔄 Choose Your Analysis Model
@@ -68,7 +69,8 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 - **Live Price Charts**: Switchable chart views for **Price History**, **RSI**, and **MACD** with smooth animations.
 - **Technical Indicator Cards**: At-a-glance cards for RSI(14), MACD Signal, SMA/EMA(20), and Mid-Term SMA(50) with interpretive labels (e.g., "Oversold - potential buy").
 - **AI Activity Feed**: A live, scrolling feed of all agent analysis and trade execution notifications.
-- **Quick-Select Tickers**: One-click access to popular tickers: AAPL, GOOGL, MSFT, TSLA, NVDA, BTC, ETH, AMZN.
+- **Quick-Select Tickers**: One-click access to the full 16-ticker watchlist: AAPL, MSFT, NVDA, TSLA, GOOGL, AMZN, META, AMD, NFLX, PLTR, AVGO, SMCI, BTC, ETH, SPY, QQQ.
+- **Visual Risk Indicators**: New **RISK** and **STOP LOSS** columns in the portfolio view with color-coded safety badges.
 
 </details>
 
@@ -78,7 +80,8 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 - **Dual Portfolio View**: Toggle between **Total Portfolio** (all positions) and **Agent Only** (AI-managed positions) views.
 - **Real-Time P&L Tracking**: Live unrealized profit/loss calculation for every open position, updated on every price refresh.
 - **Key Metrics Dashboard**: Net Equity, Buying Power, Cash, Net Profit, Net Loss, and Max Drawdown — all in one view.
-- **Open Positions Table**: Detailed table showing Symbol, Quantity, Average Entry Price, Current Price, P&L ($), and P&L (%) for all holdings.
+- **Open Positions Table**: Detailed table showing Symbol, Quantity, Average Entry Price, Current Price, **Stop Loss**, **Risk Score**, P&L ($), and P&L (%) for all holdings.
+- **Order Status Tracking**: Positions now show a **PENDING** label while orders are being filled on Alpaca, providing clear execution feedback.
 - **Equity Curve**: Historical performance chart showing portfolio growth over time.
 
 </details>
@@ -86,9 +89,11 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 <details>
 <summary><b>🤖 Autonomous Trading Agent</b></summary>
 
-- **Continuous Monitoring Loop**: The agent runs a configurable monitoring cycle (default: 30s) across a customizable watchlist.
+- **Continuous Monitoring Loop**: The agent runs a configurable monitoring cycle (e.g., every 5 minutes) across a wide 16-ticker watchlist.
 - **Autonomous Trade Execution**: When enabled, the agent automatically places orders based on its analysis — no human intervention needed.
-- **Smart Capital Allocation**: Uses 20% of available agent cash per BUY trade for diversified exposure.
+- **Risk-Aware Sizing**: Trade quantity is dynamically adjusted based on the AI's risk score (Lower risk = larger size).
+- **Automated Stop-Loss Protection**: The agent monitors positions and executes a defensive exit if a suggested stop-loss price is breached.
+- **API Resilience**: Automatically detect AlphaVantage rate limits and switches to **Local Indicator Fallbacks** (RSI, MACD) to ensure uninterrupted 24/7 screening.
 - **Holdings-Aware Selling**: SELL signals correctly liquidate the agent's actual position in that ticker, not a cash-calculated quantity.
 - **Configurable via UI**: Enable/disable autonomous mode and set agent capital allocation directly from the dashboard.
 
@@ -259,9 +264,14 @@ Edit `agent_config.json` or use the dashboard UI to configure:
 ```json
 {
     "autonomous_enabled": true,
-    "model": "llama3.1",
-    "watchlist": ["AAPL", "NVDA", "TSLA", "BTC-USD"],
-    "agent_capital": 5000.0
+    "model": "llama3",
+    "watchlist": [
+        "AAPL", "NVDA", "TSLA", "MSFT", "GOOGL", "AMZN", 
+        "META", "AMD", "NFLX", "PLTR", "AVGO", "SMCI",
+        "BTC-USD", "ETH-USD", "SPY", "QQQ"
+    ],
+    "agent_capital": 5000.0,
+    "interval_minutes": 5
 }
 ```
 
@@ -274,7 +284,7 @@ Edit `agent_config.json` or use the dashboard UI to configure:
 - [ ] Backtesting engine integration
 - [ ] Email/SMS notifications for trade alerts
 - [ ] Support for options and crypto derivatives
-- [ ] Risk management rules (stop-loss, take-profit)
+- [x] Risk management rules (stop-loss, take-profit)
 
 ---
 
