@@ -53,6 +53,9 @@ class AutonomousAgent:
         
         self.notifier.notify_analysis(ticker, signal, f"Risk: {risk_score}/10 | SL: {stop_loss} | {reasoning}")
 
+        # Update metadata locally so dashboard is informed
+        self.trading_service.update_position_metadata(ticker, stop_loss=stop_loss, risk_score=risk_score)
+
         # 2.1 Proactive Stop-Loss Check (if we have a position)
         try:
             account = self.trading_service.get_account_info()
@@ -77,6 +80,14 @@ class AutonomousAgent:
                     return analysis
         except Exception as e:
             print(f"Error in stop-loss check: {e}")
+
+        # 2.2 Market Hours Guard
+        is_crypto = any(x in ticker.upper() for x in ["USD", "BTC", "ETH", "SOL", "DOGE"])
+        market_open = self.trading_service.is_market_open()
+        
+        if not market_open and not is_crypto:
+            print(f"⏳ Market is CLOSED for {ticker}. Skipping trade execution (Analysis remains available).")
+            return analysis
 
         # 3. Execute Trade (if signal Buy/Sell and logic permits)
         if signal in ["BUY", "SELL"]:
@@ -147,7 +158,18 @@ class AutonomousAgent:
     async def start_monitoring(self):
         print(f"Starting background monitor for: {self.watchlist}")
         while True:
-            for ticker in self.watchlist:
+            # Dynamically build monitoring list: Watchlist + Portfolio Tickers
+            monitored_tickers = list(set(self.watchlist))
+            try:
+                positions = self.trading_service.get_positions()
+                portfolio_tickers = [p.symbol for p in positions]
+                for t in portfolio_tickers:
+                    if t not in monitored_tickers:
+                        monitored_tickers.append(t)
+            except Exception as e:
+                print(f"Error fetching portfolio for monitoring: {e}")
+
+            for ticker in monitored_tickers:
                 try:
                     # Reload config on every ticker cycle to pick up changes
                     self.config = self._load_config()

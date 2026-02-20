@@ -2,6 +2,7 @@ import os
 import json
 import fcntl
 import threading
+import csv
 import alpaca_trade_api as tradeapi
 from datetime import datetime
 from contextlib import contextmanager
@@ -10,6 +11,7 @@ from dotenv import load_dotenv
 SIMULATED_PORTFOLIO = "simulated_portfolio.json"
 PERFORMANCE_HISTORY = "performance_history.json"
 TRADE_HISTORY = "trade_history.json"
+TRADE_HISTORY_DIR = "trade_history"
 
 PRICE_REFRESH_INTERVAL = 60  # seconds
 
@@ -21,6 +23,10 @@ class TradingService:
         self.base_url = "https://paper-api.alpaca.markets" # Paper trading by default
         self._last_price_refresh = None  # throttle tracker
         
+        # Ensure trade history directory exists
+        if not os.path.exists(TRADE_HISTORY_DIR):
+            os.makedirs(TRADE_HISTORY_DIR)
+
         if self.api_key and self.secret_key:
             self.api = tradeapi.REST(self.api_key, self.secret_key, self.base_url, api_version='v2')
             self.active = True
@@ -31,6 +37,34 @@ class TradingService:
             self.active = True # Trading is "active" but in simulation mode
             self.mode = "SIMULATION"
             self._ensure_sim_portfolio()
+
+    def is_market_open(self):
+        """Checks if the US stock market is currently open."""
+        if self.mode == "ALPACA" and self.api:
+            try:
+                clock = self.api.get_clock()
+                return clock.is_open
+            except Exception as e:
+                print(f"Error checking Alpaca clock: {e}")
+                # Fallback to manual check if API fails
+        
+        # Manual Fallback: NYSE hours (9:30 AM - 4:00 PM ET, Mon-Fri)
+        from datetime import datetime, time
+        import pytz
+        
+        utc_now = datetime.now(pytz.utc)
+        ny_tz = pytz.timezone('US/Eastern')
+        ny_now = utc_now.astimezone(ny_tz)
+        
+        # Weekday check (0=Monday, 6=Sunday)
+        if ny_now.weekday() >= 5:
+            return False
+            
+        market_open = time(9, 30)
+        market_close = time(16, 0)
+        current_time = ny_now.time()
+        
+        return market_open <= current_time <= market_close
 
     def _ensure_sim_portfolio(self):
         if not os.path.exists(SIMULATED_PORTFOLIO):
@@ -214,7 +248,11 @@ class TradingService:
                         alp_pos = self.api.get_position(symbol)
                         avg_entry = float(alp_pos.avg_entry_price)
                     except:
-                        pass
+                        # FALLBACK: Try to get avg entry from local agent portfolio/simulated portfolio
+                        with self._locked_portfolio("r") as state:
+                            pos = state["positions"].get(symbol) or state.get("agent_portfolio", {}).get("positions", {}).get(symbol)
+                            if pos:
+                                avg_entry = pos.get("avg_entry_price", 0)
 
                 order = self.api.submit_order(
                     symbol=symbol,
@@ -230,7 +268,7 @@ class TradingService:
                 price_data = mkt.get_market_data(symbol)
                 current_price = price_data.get("price_data", {}).get("current_price", 0)
 
-                realized_pl = (current_price - avg_entry) * qty if side.lower() == "sell" and avg_entry > 0 else None
+                realized_pl = (current_price - avg_entry) * qty if side.lower() == "sell" and avg_entry > 0 else (0.0 if side.lower() == "sell" else None)
 
                 # Manual logging for Alpaca trades so they show in UI
                 trade_entry = {
@@ -245,12 +283,22 @@ class TradingService:
                 }
                 self._log_trade(trade_entry)
 
-                # --- SYNC AGENT METADATA IF ALPACA AGENT TRADE ---
-                # This is now handled by _execute_sim_trade which is called at the end
-                
-                # Fetch account to log performance
-                acc = self.api.get_account()
-                self._log_performance(float(acc.equity))
+                # --- SYNC AGENT METADATA IF ALPACA TRADE ---
+                # We save this so the UI can show stop_loss/risk even for live trades
+                with self._locked_portfolio("r+") as state:
+                    # Sync to main positions metadata if needed
+                    # (Alpaca positions are live, but we can store extra info here)
+                    ag_port = state.get("agent_portfolio")
+                    if ag_port:
+                        if side.lower() == "buy":
+                            p = ag_port["positions"].get(symbol, {"qty": 0, "avg_entry_price": current_price})
+                            p["stop_loss"] = stop_loss
+                            p["risk_score"] = risk_score
+                            ag_port["positions"][symbol] = p
+                        elif side.lower() == "sell":
+                            # We don't remove it here immediately because Alpaca listing 
+                            # might still show it until filled. But let's keep metadata in sync.
+                            pass
 
                 return {"status": "success", "mode": "alpaca", "result": order._asset if hasattr(order, '_asset') else str(order)}
             except Exception as e:
@@ -292,7 +340,9 @@ class TradingService:
                     "avg_entry_price": new_avg,
                     "current_price": price,
                     "unrealized_pl": (price - new_avg) * new_qty,
-                    "unrealized_plpc": (price / new_avg) - 1 if new_avg else 0
+                    "unrealized_plpc": (price / new_avg) - 1 if new_avg else 0,
+                    "stop_loss": stop_loss,
+                    "risk_score": risk_score
                 }
             else: # sell
                 pos = state["positions"].get(symbol)
@@ -453,20 +503,20 @@ class TradingService:
             last_timestamp = datetime.fromisoformat(last_entry["timestamp"])
             time_diff = (timestamp_dt - last_timestamp).total_seconds()
             
-            if last_entry["equity"] != equity or time_diff >= 60:
+            if last_entry["equity"] != equity or time_diff >= 15:
                 should_log = True
 
         if should_log:
             history.append({"timestamp": timestamp, "equity": equity})
             
-            # Keep last 1000 points
-            if len(history) > 1000:
-                history = history[-1000:]
+            # Keep last 5000 points
+            if len(history) > 5000:
+                history = history[-5000:]
                 
             with open(PERFORMANCE_HISTORY, "w") as f:
                 json.dump(history, f)
     def _log_trade(self, entry):
-        """Logs a completed trade to trade history."""
+        """Logs a completed trade to trade history (JSON and daily CSV)."""
         history = []
         if os.path.exists(TRADE_HISTORY):
             try:
@@ -482,6 +532,50 @@ class TradingService:
             
         with open(TRADE_HISTORY, "w") as f:
             json.dump(history, f)
+            
+        # Log to daily CSV
+        self._log_trade_csv(entry)
+
+    def _log_trade_csv(self, entry):
+        """Logs a trade entry to a daily CSV file."""
+        try:
+            timestamp_str = entry.get("timestamp")
+            if not timestamp_str:
+                timestamp_str = datetime.now().isoformat()
+            
+            timestamp = datetime.fromisoformat(timestamp_str)
+            date_str = timestamp.strftime("%Y-%m-%d")
+            filename = os.path.join(TRADE_HISTORY_DIR, f"trades_{date_str}.csv")
+            
+            file_exists = os.path.isfile(filename)
+            
+            # Fields in the entry
+            fieldnames = ["timestamp", "symbol", "side", "qty", "price", "source", "mode", "realized_pl"]
+            
+            with open(filename, mode='a', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                
+                if not file_exists:
+                    writer.writeheader()
+                
+                # Create a row with only existing keys
+                row = {field: entry.get(field) for field in fieldnames}
+                writer.writerow(row)
+        except Exception as e:
+            print(f"Error logging trade to CSV: {e}")
+    def update_position_metadata(self, symbol: str, stop_loss: float = None, risk_score: float = None):
+        """Updates metadata for a position without trading."""
+        with self._locked_portfolio("r+") as state:
+            ag_port = state.get("agent_portfolio")
+            if ag_port:
+                p = ag_port["positions"].get(symbol, {"qty": 0, "avg_entry_price": 0})
+                if stop_loss is not None:
+                    p["stop_loss"] = stop_loss
+                if risk_score is not None:
+                    p["risk_score"] = risk_score
+                ag_port["positions"][symbol] = p
+                return True
+        return False
 
     def get_trade_history(self):
         """Returns the logged trade history."""

@@ -21,16 +21,16 @@
 
     /* ... (previous vars) ... */
     :root {
-      --bg: #080c10;
-      --surface: #0d1117;
-      --panel: #111820;
-      --border: #1e2d3d;
-      --accent: #00d4ff;
-      --accent2: #00ff88;
-      --danger: #ff4757;
-      --warn: #ffa502;
-      --text: #c9d4e0;
-      --muted: #6a7c8d;
+      --bg: #06090c;
+      --surface: #0a0e14;
+      --panel: #0d121b;
+      --border: rgba(45, 55, 72, 0.4);
+      --accent: #0ea5e9;
+      --accent2: #10b981;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --text: #e2e8f0;
+      --muted: #64748b;
       --mono: 'Space Mono', monospace;
       --sans: 'DM Sans', sans-serif;
       --base-font-size: 16px;
@@ -106,11 +106,11 @@
 
     .logo-main {
       font-family: var(--mono);
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--accent);
-      letter-spacing: 0.06em;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 30px rgba(14, 165, 233, 0.3);
     }
 
     .logo-sub {
@@ -164,6 +164,29 @@
       }
     }
 
+    .market-badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .market-open {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .market-closed {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
     .time-display {
       font-family: var(--mono);
       font-size: 0.72rem;
@@ -212,17 +235,17 @@
     }
 
     .ticker-input {
-      background: var(--bg);
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--border);
-      color: var(--accent);
+      color: var(--text);
       font-family: var(--mono);
-      font-size: 1.1rem;
-      letter-spacing: 0.12em;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 12px 16px;
-      border-radius: 4px;
+      padding: 14px 18px;
+      border-radius: 8px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       width: 100%;
     }
 
@@ -328,16 +351,16 @@
     .signal-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 3px;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 8px;
       font-family: var(--mono);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
+      letter-spacing: 0.12em;
+      margin-bottom: 20px;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .signal-badge.visible {
@@ -404,17 +427,17 @@
     }
 
     .reasoning-box {
-      font-size: 1rem;
-      line-height: 1.6;
+      font-size: 0.95rem;
+      line-height: 1.7;
       color: var(--text);
-      padding: 18px;
-      background: var(--bg);
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      max-height: 250px;
+      border-radius: 12px;
+      max-height: 300px;
       overflow-y: auto;
       opacity: 0;
-      transition: opacity 0.3s 0.2s;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .reasoning-box.visible {
@@ -562,13 +585,14 @@
     .indicator-panel {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 12px 16px;
+      border-radius: 12px;
+      padding: 20px 24px;
       flex: 1 1 auto;
-      min-width: 130px;
+      min-width: 150px;
       opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(12px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .metric-card.visible,
@@ -580,17 +604,18 @@
     .metric-label,
     .indicator-name {
       font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .metric-value,
     .indicator-value {
       font-family: var(--mono);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      font-weight: 500;
       color: var(--text);
     }
 
@@ -684,10 +709,21 @@
 
     .chart-title {
       font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
       color: var(--muted);
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chart-title::before {
+      content: '';
+      width: 2px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 2px;
     }
 
     .chart-tabs {
@@ -697,21 +733,21 @@
 
     .chart-tab {
       font-family: var(--mono);
-      font-size: 0.65rem;
-      padding: 4px 10px;
+      font-size: 0.62rem;
+      padding: 6px 12px;
       border: 1px solid var(--border);
-      border-radius: 3px;
-      background: transparent;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.1);
       color: var(--muted);
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .chart-tab.active,
-    .chart-tab:hover {
+    .chart-tab:hover,
+    .chart-tab.active {
       border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(0, 212, 255, 0.06);
+      color: var(--text);
+      background: rgba(14, 165, 233, 0.08);
     }
 
     .chart-container {
@@ -995,6 +1031,7 @@
       <span class="logo-sub">AI Trading Agent</span>
     </div>
     <div class="header-right">
+      <div id="marketStatusBadge" class="market-badge market-closed">Checking Market...</div>
       <div class="status-dot">
         <div class="dot" id="apiDot"></div>
         <span id="apiStatus">connecting...</span>
@@ -1277,6 +1314,10 @@
           <div class="chart-panel visible" id="performancePanel" style="margin-bottom: 0;">
             <div class="chart-header">
               <span class="chart-title">Equity Performance (Neural Simulation)</span>
+              <div class="chart-tabs">
+                <button class="chart-tab" id="btnEqFull" onclick="switchEquityZoom('full', this)">FULL</button>
+                <button class="chart-tab active" id="btnEqZoom" onclick="switchEquityZoom('zoom', this)">ZOOM</button>
+              </div>
             </div>
             <div class="chart-container" style="height: 250px;">
               <canvas id="performanceChart"></canvas>
@@ -1327,6 +1368,8 @@
     // ── STATE ───────────────────────────────────────────────────
     let chartInstance = null;
     let perfChartInstance = null;
+    let equityZoomMode = 'zoom';
+    let lastEquityHistory = [];
     let topPerformersChartInstance = null;
     let currentData = null;
     let analysisHistory = [];
@@ -1372,10 +1415,14 @@
       status.style.color = 'var(--muted)';
 
       try {
+        // Collect risk metrics from current analysis if available
+        const risk_score = (currentData && currentData.raw_analysis) ? currentData.raw_analysis.risk_score : 0;
+        const stop_loss = (currentData && currentData.raw_analysis) ? currentData.raw_analysis.stop_loss : 0;
+
         const res = await fetch(`${API_BASE}/trade`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ticker, qty, side: tradeSide, strategy })
+          body: JSON.stringify({ ticker, qty, side: tradeSide, strategy, risk_score, stop_loss })
         });
 
         const result = await res.json();
@@ -1573,15 +1620,72 @@
     }
 
     function renderPerformanceChart(history) {
+      lastEquityHistory = history;
       const ctx = document.getElementById('performanceChart').getContext('2d');
-      const labels = history.map(h => new Date(h.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      const labels = history.map(h => {
+        const d = new Date(h.timestamp);
+        // Adaptive labels: only show seconds if history is small
+        return history.length < 50
+          ? d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+          : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      });
       const values = history.map(h => h.equity);
+
+      let yMin = undefined;
+      let yMax = undefined;
+
+      if (equityZoomMode === 'zoom' && values.length > 5) {
+        // Robust scaling: Focus on 5th to 95th percentile to ignore outliers
+        const sorted = [...values].sort((a, b) => a - b);
+        const p5 = sorted[Math.floor(sorted.length * 0.05)];
+        const p95 = sorted[Math.floor(sorted.length * 0.95)];
+        const range = p95 - p5;
+        // Add 10% padding
+        yMin = p5 - (range * 0.1);
+        yMax = p95 + (range * 0.1);
+      }
 
       if (perfChartInstance) { perfChartInstance.destroy(); }
 
+      const shadowPlugin = {
+        id: 'shadow',
+        beforeDraw: (chart) => {
+          const { ctx } = chart;
+          ctx.save();
+          ctx.shadowColor = 'rgba(16, 185, 129, 0.3)';
+          ctx.shadowBlur = 12;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 4;
+        },
+        afterDraw: (chart) => {
+          chart.ctx.restore();
+        }
+      };
+
+      const crosshairPlugin = {
+        id: 'crosshair',
+        afterDraw: (chart) => {
+          if (chart.tooltip?._active?.length) {
+            const x = chart.tooltip._active[0].element.x;
+            const yAxis = chart.scales.y;
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, yAxis.top);
+            ctx.lineTo(x, yAxis.bottom);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      };
+
       const grad = ctx.createLinearGradient(0, 0, 0, 250);
-      grad.addColorStop(0, 'rgba(0,255,136,0.2)');
-      grad.addColorStop(1, 'rgba(0,255,136,0)');
+      grad.addColorStop(0, 'rgba(16, 185, 129, 0.15)');
+      grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.05)');
+      grad.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
       perfChartInstance = new Chart(ctx, {
         type: 'line',
@@ -1590,15 +1694,20 @@
           datasets: [{
             label: 'Equity',
             data: values,
-            borderColor: '#00ff88',
+            borderColor: '#10b981',
             borderWidth: 2,
             backgroundColor: grad,
             fill: true,
-            tension: 0.4,
+            tension: 0.3,
+            borderCapStyle: 'round',
             pointRadius: 0,
             pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#10b981',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
           }]
         },
+        plugins: [shadowPlugin, crosshairPlugin],
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -1613,16 +1722,45 @@
           scales: {
             x: {
               grid: { display: false },
-              ticks: { color: '#4a5a6a', font: { family: 'Space Mono', size: 9 }, maxTicksLimit: 10 }
+              ticks: {
+                color: '#4a5a6a',
+                font: { family: 'Space Mono', size: 9 },
+                maxTicksLimit: 8,
+                autoSkip: true,
+                padding: 10
+              }
             },
             y: {
-              grid: { color: 'rgba(30,45,61,0.5)' },
-              ticks: { color: '#4a5a6a', font: { family: 'Space Mono', size: 9 }, callback: v => `$${v.toLocaleString()}` },
+              grid: { color: 'rgba(255, 255, 255, 0.03)', drawBorder: false },
+              beginAtZero: false,
+              min: yMin,
+              max: yMax,
+              grace: equityZoomMode === 'full' ? '5%' : '0%',
+              ticks: {
+                color: '#4a5a6a',
+                font: { family: 'Space Mono', size: 9 },
+                callback: v => `$${v.toLocaleString()}`,
+                padding: 10
+              },
               position: 'right'
             }
+          },
+          layout: {
+            padding: { top: 10, bottom: 0, left: 10, right: 10 }
           }
         }
       });
+    }
+
+    function switchEquityZoom(mode, btn) {
+      equityZoomMode = mode;
+      // Update UI
+      document.querySelectorAll('#performancePanel .chart-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Re-render
+      if (lastEquityHistory.length > 0) {
+        renderPerformanceChart(lastEquityHistory);
+      }
     }
 
 
@@ -1767,18 +1905,18 @@
       const metrics = [
         { label: 'Current Price', value: price.price ? `$${Number(price.price).toFixed(2)}` : '—', cls: '' },
         {
-          label: 'Change %', value: price.change !== 'N/A' ? `${parseFloat(price.change).toFixed(2)}%` : '—',
+          label: 'Change %', value: (price.change !== undefined && price.change !== null && price.change !== 'N/A') ? `${parseFloat(price.change).toFixed(2)}%` : '—',
           cls: parseFloat(price.change) >= 0 ? 'up' : 'down'
         },
         {
-          label: 'RSI (14)', value: indicators.rsi ? indicators.rsi.toFixed(1) : '—',
+          label: 'RSI (14)', value: (indicators.rsi !== undefined && indicators.rsi !== null) ? indicators.rsi.toFixed(1) : '—',
           cls: indicators.rsi > 70 ? 'down' : indicators.rsi < 30 ? 'up' : 'neutral'
         },
         {
-          label: 'MACD', value: indicators.macd ? indicators.macd.toFixed(3) : '—',
+          label: 'MACD', value: (indicators.macd !== undefined && indicators.macd !== null) ? indicators.macd.toFixed(3) : '—',
           cls: indicators.macd > 0 ? 'up' : 'down'
         },
-        { label: 'Volume', value: raw.volume ? formatVolume(raw.volume) : '—', cls: '' },
+        { label: 'Volume', value: (raw.volume !== undefined && raw.volume !== null) ? formatVolume(raw.volume) : '—', cls: '' },
         { label: 'Signal', value: data.signal || '—', cls: data.signal === 'BUY' ? 'up' : data.signal === 'SELL' ? 'down' : 'neutral' },
       ];
 
@@ -1898,25 +2036,25 @@
       const items = [
         {
           name: 'RSI (14)',
-          value: rsi ? rsi.toFixed(1) : '—',
+          value: (rsi !== undefined && rsi !== null) ? rsi.toFixed(1) : '—',
           color: rsi > 70 ? 'var(--danger)' : rsi < 30 ? 'var(--accent2)' : 'var(--warn)',
           status: rsi > 70 ? 'Overbought — potential sell' : rsi < 30 ? 'Oversold — potential buy' : 'Neutral zone'
         },
         {
           name: 'MACD Signal',
-          value: macd ? (macd > 0 ? `+${macd.toFixed(3)}` : macd.toFixed(3)) : '—',
-          color: macd > 0 ? 'var(--accent2)' : 'var(--danger)',
-          status: macd > 0 ? 'Bullish momentum' : 'Bearish momentum'
+          value: (macd !== undefined && macd !== null) ? (macd > 0 ? `+${macd.toFixed(3)}` : (macd === 0 ? '0.000' : macd.toFixed(3))) : '—',
+          color: macd > 0 ? 'var(--accent2)' : (macd < 0 ? 'var(--danger)' : 'var(--warn)'),
+          status: macd > 0 ? 'Bullish momentum' : (macd < 0 ? 'Bearish momentum' : 'Stable')
         },
         {
           name: 'SMA / EMA (20)',
-          value: indicators.sma_20 ? indicators.sma_20.toFixed(2) : '—',
+          value: (indicators.sma_20 !== undefined && indicators.sma_20 !== null) ? indicators.sma_20.toFixed(2) : '—',
           color: 'var(--accent)',
-          status: `EMA(20): $${indicators.ema_20 ? indicators.ema_20.toFixed(2) : '—'}`
+          status: `EMA(20): $${(indicators.ema_20 !== undefined && indicators.ema_20 !== null) ? indicators.ema_20.toFixed(2) : '—'}`
         },
         {
           name: 'Mid-Term SMA (50)',
-          value: indicators.sma_50 ? indicators.sma_50.toFixed(2) : '—',
+          value: (indicators.sma_50 !== undefined && indicators.sma_50 !== null) ? indicators.sma_50.toFixed(2) : '—',
           color: 'var(--warn)',
           status: indicators.sma_50 < (indicators.sma_20 || 0) ? 'Bullish crossover' : 'Bearish crossover'
         }
@@ -2031,6 +2169,16 @@
       document.getElementById('simModeBadge').style.display =
         (data.status === 'active' && data.mode === 'simulation') ? 'inline-block' : 'none';
 
+      // Update Market Status Badge
+      const mb = document.getElementById('marketStatusBadge');
+      if (data.is_market_open) {
+        mb.textContent = 'MARKET OPEN';
+        mb.className = 'market-badge market-open';
+      } else {
+        mb.textContent = 'MARKET CLOSED';
+        mb.className = 'market-badge market-closed';
+      }
+
       if (data.status === 'inactive') {
         list.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--danger); padding:30px">Trading Service Inactive (Check API Keys)</td></tr>`;
         return;
@@ -2089,13 +2237,13 @@
           // Detect if it's a pending trade in Agent view (no price info yet)
           const isPending = !p.current_price || p.current_price === 0;
 
-          const sl = p.stop_loss && p.stop_loss > 0 ? `$${p.stop_loss.toFixed(2)}` : '—';
+          const sl = p.stop_loss && p.stop_loss > 0 ? `$${p.stop_loss.toFixed(2)}` : (isPending ? '—' : '<span style="color:var(--muted); font-size:0.65rem">ANALYSIS PENDING</span>');
           const risk = p.risk_score || 0;
           let riskCls = 'risk-low';
           if (risk > 7) riskCls = 'risk-high';
           else if (risk > 4) riskCls = 'risk-med';
 
-          const riskLabel = risk > 0 ? `${risk}/10` : '—';
+          const riskLabel = (risk !== undefined && risk !== null && risk > 0) ? `${risk}/10` : (isPending ? '—' : 'WAITING');
 
           return `
               <tr>
@@ -2226,7 +2374,7 @@
         .width(elem.clientWidth)
         .height(200)
         .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-        .pointOfView({ lat: 20, lng: 0, altitude: 2.5 });
+        .pointOfView({ lat: 20, lng: 0, altitude: 2.1 });
 
       // Add auto-resize
       window.addEventListener('resize', () => {
@@ -2286,7 +2434,7 @@
         .labelDotRadius(0.5)
         .labelAltitude(0.05);
 
-      world.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: 1.8 }, 1500);
+      world.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: 1.4 }, 1500);
     }
 
     // Hook into renderDashboard to update globe
@@ -2295,6 +2443,9 @@
       originalRender(data);
       updateGlobe(data.ticker);
     };
+    // Initial Load
+    loadAccount();
+    setInterval(loadAccount, 30000); // Background refresh for header status
   </script>
 
 </body>

@@ -33,6 +33,8 @@ class TradeRequest(BaseModel):
     qty: int
     side: str
     strategy: str = "market"
+    risk_score: float = 0
+    stop_loss: float = 0
 
 class AgentConfigRequest(BaseModel):
     enabled: bool = None
@@ -63,6 +65,7 @@ def get_account():
         return {
             "status": "active",
             "mode": trader.mode,
+            "is_market_open": trader.is_market_open(),
             "equity": acc.equity,
             "buying_power": acc.buying_power,
             "cash": acc.cash,
@@ -224,7 +227,14 @@ def execute_trade(request: TradeRequest):
         # 3. Execute Trade
         # from app.services.trading_service import TradingService # Moved to global init
         # trader = TradingService() # Use global trading_service
-        result = trading_service.place_order(request.ticker, request.qty, request.side, source="manual")
+        result = trading_service.place_order(
+            request.ticker, 
+            request.qty, 
+            request.side, 
+            source="manual", 
+            stop_loss=request.stop_loss, 
+            risk_score=request.risk_score
+        )
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -258,6 +268,7 @@ def analyze_ticker(request: AnalysisRequest):
         # Merge indicators and history into raw_analysis for the dashboard
         enriched_analysis = {**analysis_result}
         enriched_analysis["indicators"] = market_data.get("indicators", {})
+        enriched_analysis["volume"] = price_data.get("volume", 0)
         
         # Extract history as a simple list for the frontend chart
         history_dict = price_data.get("history", {})
@@ -277,7 +288,8 @@ def analyze_ticker(request: AnalysisRequest):
             "market_data_summary": {
                 "price": price_data.get("current_price", "N/A"),
                 "change": price_data.get("change_percent", "N/A"),
-                "change_abs": price_data.get("change_absolute", "N/A")
+                "change_abs": price_data.get("change_absolute", "N/A"),
+                "volume": price_data.get("volume", 0)
             },
             "raw_analysis": enriched_analysis
         }

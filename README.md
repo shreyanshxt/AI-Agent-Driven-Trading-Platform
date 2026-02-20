@@ -17,9 +17,11 @@
 
 ## 📸 Dashboard Preview
 
-| 🔍 Live Analysis View | 💼 Portfolio & Account View | 📈 Performance & History |
-|:---:|:---:|:---:|
-| ![Analysis View](assets/analysis_details.png) | ![Portfolio View](assets/portfolio_overview.png) | ![History View](assets/trade_history.png) |
+| 🔍 AI Reasoning & Analysis | 💼 Portfolio & Risk Metrics |
+|:---:|:---:|
+| ![AI Analysis](assets/live_analysis.png) | ![Portfolio](assets/portfolio_view.png) |
+| **🛡️ Market Status Indicator** | **📈 Equity Performance (Zoom)** |
+| ![Market Status](assets/market_status.png) | ![Performance](assets/trade_history.png) |
 
 ---
 
@@ -27,9 +29,7 @@
 
 **FinSight** is a full-stack, autonomous AI trading agent that bridges the gap between complex financial data and actionable trading decisions. It leverages **local Large Language Models** (via Ollama) to analyze real-time market data, generate intelligent `BUY`, `SELL`, or `HOLD` signals, and autonomously execute trades — all from a sleek, dark-mode dashboard.
 
-Whether you're a developer exploring AI in finance, a quant researcher, or just curious about autonomous agents, FinSight provides a complete, production-ready platform to experiment with.
-
-> **⚠️ Disclaimer**: FinSight is designed for **paper trading and educational purposes only**. It does not constitute financial advice. Always do your own research before making real investment decisions.
+**Safety First**: Since the latest update, FinSight is now **Market Aware**, automatically pausing trading execution for stocks when the market is closed to protect against low liquidity and opening gaps.
 
 ---
 
@@ -39,7 +39,7 @@ FinSight doesn't rely on hardcoded "if-then" rules. Instead, it uses a multi-lay
 
 ### 1. Data Acquisition (The "Eyes")
 Every cycle, the agent gathers a full context of the stock:
-- **Price Action**: Tick-by-tick monitoring of current price and volatility.
+- **Price Action**: Tick-by-tick monitoring of current price, volatility, and **real-time volume**.
 - **Technical Indicators**: RSI(14), MACD, and multiple Moving Averages (SMA/EMA).
 - **Sentiment Feed**: Real-time fetching of the latest news headlines for the specific ticker.
 
@@ -52,6 +52,7 @@ The system feeds this data to a local LLM (via Ollama) which acts as a seasoned 
 ### 3. Execution & Safety (The "Shield")
 - **Dynamic Sizing**: Uses the Risk Score to calculate position size. Low-risk setups get larger capital allocation.
 - **Persistent Protection**: The agent monitors positions 24/7 and executes defensive exits if the stop-loss is triggered.
+- **Market Hours Awareness**: Automatically detects US market hours and pauses execution for equity assets during off-hours, while remaining active for 24/7 markets like Crypto.
 
 ---
 
@@ -64,6 +65,7 @@ The system feeds this data to a local LLM (via Ollama) which acts as a seasoned 
 - **Intelligent Signal Generation**: The AI synthesizes technical indicators, price history, and live news to produce clear `BUY`, `SELL`, or `HOLD` signals with detailed reasoning.
 - **News Sentiment Analysis**: Fetches and incorporates the latest financial news for each ticker into the analysis context.
 - **Risk Assessment**: The AI now generates a **Risk Score (1-10)** and a **Suggested Stop-Loss** for every trade, ensuring defensive positioning.
+- **Volume Awareness**: Real-time trading volume is now incorporated into the analysis and displayed on the dashboard.
 - **Structured Reasoning**: Every decision comes with a human-readable explanation of *why* the signal was generated.
 
 ### 🔄 Choose Your Analysis Model
@@ -87,12 +89,13 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 <summary><b>📊 Interactive Real-Time Dashboard</b></summary>
 
 - **Premium Dark UI**: A glassmorphic, dark-mode interface with vibrant cyan/teal accents built for professional use.
+- **Market Status Indicator**: New header badge showing **MARKET OPEN/CLOSED** status based on real-time US exchange hours.
 - **3D Globe Visualization**: An interactive, rotating 3D Earth that visualizes company headquarters locations and global market activity.
 - **Live Price Charts**: Switchable chart views for **Price History**, **RSI**, and **MACD** with smooth animations.
-- **Technical Indicator Cards**: At-a-glance cards for RSI(14), MACD Signal, SMA/EMA(20), and Mid-Term SMA(50) with interpretive labels (e.g., "Oversold - potential buy").
+- **Equity Performance Zoom**: A new **ZOOM** toggle for the equity curve chart that filters out historical outliers to focus on recent P&L fluctuations.
+- **Technical Indicator Cards**: At-a-glance cards for RSI(14), MACD Signal, SMA/EMA(20), and Mid-Term SMA(50) with interpretive labels.
 - **AI Activity Feed**: A live, scrolling feed of all agent analysis and trade execution notifications.
-- **Quick-Select Tickers**: One-click access to the full 16-ticker watchlist: AAPL, MSFT, NVDA, TSLA, GOOGL, AMZN, META, AMD, NFLX, PLTR, AVGO, SMCI, BTC, ETH, SPY, QQQ.
-- **Visual Risk Indicators**: New **RISK** and **STOP LOSS** columns in the portfolio view with color-coded safety badges.
+- **Visual Risk Indicators**: Clear **RISK** and **STOP LOSS** status in the portfolio view with **"ANALYSIS PENDING"** placeholders for new positions.
 
 </details>
 
@@ -103,8 +106,8 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 - **Real-Time P&L Tracking**: Live unrealized profit/loss calculation for every open position, updated on every price refresh.
 - **Key Metrics Dashboard**: Net Equity, Buying Power, Cash, Net Profit, Net Loss, and Max Drawdown — all in one view.
 - **Open Positions Table**: Detailed table showing Symbol, Quantity, Average Entry Price, Current Price, **Stop Loss**, **Risk Score**, P&L ($), and P&L (%) for all holdings.
+- **Metadata Persistence**: Stop-loss and risk analysis are now saved locally, ensuring they persist across dashboard refreshes even for Alpaca trades.
 - **Order Status Tracking**: Positions now show a **PENDING** label while orders are being filled on Alpaca, providing clear execution feedback.
-- **Equity Curve**: Historical performance chart showing portfolio growth over time.
 
 </details>
 
@@ -112,7 +115,9 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 <summary><b>🤖 Autonomous Trading Agent</b></summary>
 
 - **Continuous Monitoring Loop**: The agent runs a configurable monitoring cycle (e.g., every 5 minutes) across a wide 16-ticker watchlist.
+- **Portfolio-Wide Coverage**: The agent now automatically monitors **all held positions** in addition to the watchlist, ensuring protective stop-losses are updated for every asset.
 - **Autonomous Trade Execution**: When enabled, the agent automatically places orders based on its analysis — no human intervention needed.
+- **Market Hours Guard**: Automatically skips trade execution for equity assets when US markets are closed, reducing risk from after-hours volatility.
 - **Risk-Aware Sizing**: Trade quantity is dynamically adjusted based on the AI's risk score (Lower risk = larger size).
 - **Automated Stop-Loss Protection**: The agent monitors positions and executes a defensive exit if a suggested stop-loss price is breached.
 - **API Resilience**: Automatically detect AlphaVantage rate limits and switches to **Local Indicator Fallbacks** (RSI, MACD) to ensure uninterrupted 24/7 screening.
