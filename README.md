@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🤖 FinSight AI Trading Agent
+#  FinSight AI Trading Agent
 
 ### *An Autonomous, LLM-Powered Trading Platform with Real-Time Market Intelligence*
 
