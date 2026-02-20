@@ -15,17 +15,17 @@
 
 ---
 
-## 📸 Dashboard Preview
+## Dashboard Preview
 
-| 🔍 AI Reasoning & Analysis | 💼 Portfolio & Risk Metrics |
+|  AI Reasoning & Analysis |  Portfolio & Risk Metrics |
 |:---:|:---:|
 | ![AI Analysis](assets/live_analysis.png) | ![Portfolio](assets/portfolio_view.png) |
-| **🛡️ Market Status Indicator** | **📈 Equity Performance (Zoom)** |
+| ** Market Status Indicator** | **📈 Equity Performance (Zoom)** |
 | ![Market Status](assets/market_status.png) | ![Performance](assets/trade_history.png) |
 
 ---
 
-## 🧭 About
+##  About
 
 **FinSight** is a full-stack, autonomous AI trading agent that bridges the gap between complex financial data and actionable trading decisions. It leverages **local Large Language Models** (via Ollama) to analyze real-time market data, generate intelligent `BUY`, `SELL`, or `HOLD` signals, and autonomously execute trades — all from a sleek, dark-mode dashboard.
 
@@ -33,7 +33,7 @@
 
 ---
 
-## 🧠 The Brain: AI-Driven Synthesis Algorithm
+##  The Brain: AI-Driven Synthesis Algorithm
 
 FinSight doesn't rely on hardcoded "if-then" rules. Instead, it uses a multi-layered **Synthesis Algorithm** to make decisions:
 
@@ -56,10 +56,10 @@ The system feeds this data to a local LLM (via Ollama) which acts as a seasoned 
 
 ---
 
-## ✨ Features
+##  Features
 
 <details>
-<summary><b>🧠 AI-Driven Market Analysis</b></summary>
+<summary><b> AI-Driven Market Analysis</b></summary>
 
 - **Local LLM Integration**: Powered by [Ollama](https://ollama.com), supporting models like `llama3.1`, `mistral`, `gemma`, and more — all running **100% locally** with no data sent to external AI APIs.
 - **Intelligent Signal Generation**: The AI synthesizes technical indicators, price history, and live news to produce clear `BUY`, `SELL`, or `HOLD` signals with detailed reasoning.
@@ -68,7 +68,7 @@ The system feeds this data to a local LLM (via Ollama) which acts as a seasoned 
 - **Volume Awareness**: Real-time trading volume is now incorporated into the analysis and displayed on the dashboard.
 - **Structured Reasoning**: Every decision comes with a human-readable explanation of *why* the signal was generated.
 
-### 🔄 Choose Your Analysis Model
+###  Choose Your Analysis Model
 
 Select the LLM that powers your analysis directly from the dashboard — no restart needed:
 
@@ -86,7 +86,7 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 </details>
 
 <details>
-<summary><b>📊 Interactive Real-Time Dashboard</b></summary>
+<summary><b> Interactive Real-Time Dashboard</b></summary>
 
 - **Premium Dark UI**: A glassmorphic, dark-mode interface with vibrant cyan/teal accents built for professional use.
 - **Market Status Indicator**: New header badge showing **MARKET OPEN/CLOSED** status based on real-time US exchange hours.
@@ -100,7 +100,7 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 </details>
 
 <details>
-<summary><b>💼 Portfolio & Account Management</b></summary>
+<summary><b> Portfolio & Account Management</b></summary>
 
 - **Dual Portfolio View**: Toggle between **Total Portfolio** (all positions) and **Agent Only** (AI-managed positions) views.
 - **Real-Time P&L Tracking**: Live unrealized profit/loss calculation for every open position, updated on every price refresh.
@@ -112,7 +112,7 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 </details>
 
 <details>
-<summary><b>🤖 Autonomous Trading Agent</b></summary>
+<summary><b> Autonomous Trading Agent</b></summary>
 
 - **Continuous Monitoring Loop**: The agent runs a configurable monitoring cycle (e.g., every 5 minutes) across a wide 16-ticker watchlist.
 - **Portfolio-Wide Coverage**: The agent now automatically monitors **all held positions** in addition to the watchlist, ensuring protective stop-losses are updated for every asset.
@@ -124,7 +124,7 @@ Select the LLM that powers your analysis directly from the dashboard — no rest
 - **Holdings-Aware Selling**: SELL signals correctly liquidate the agent's actual position in that ticker, not a cash-calculated quantity.
 - **Configurable via UI**: Enable/disable autonomous mode and set agent capital allocation directly from the dashboard.
 
-### 💰 Agent Capital & Isolated Portfolio
+###  Agent Capital & Isolated Portfolio
 
 FinSight lets you allocate a **fixed budget** to the AI agent, completely isolated from your main account:
 
@@ -144,7 +144,7 @@ FinSight lets you allocate a **fixed budget** to the AI agent, completely isolat
 - **Order Management**: View and track pending orders in real-time.
 - **Trade History Log**: Every trade (manual or agent-executed) is logged with timestamp, price, quantity, and source.
 
-### 📐 6 Trading Strategies
+###  6 Trading Strategies
 
 When placing a manual trade, choose from **6 distinct strategies** — each with its own entry logic:
 
@@ -162,7 +162,7 @@ When placing a manual trade, choose from **6 distinct strategies** — each with
 </details>
 
 <details>
-<summary><b>🔧 Technical Architecture</b></summary>
+<summary><b> Technical Architecture</b></summary>
 
 - **FastAPI Backend**: High-performance async REST API with automatic Swagger documentation at `/docs`.
 - **File-Locked State Management**: Uses `fcntl` file locking to prevent race conditions when multiple processes (agent + API) write to the portfolio simultaneously.
@@ -175,7 +175,7 @@ When placing a manual trade, choose from **6 distinct strategies** — each with
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -189,7 +189,7 @@ When placing a manual trade, choose from **6 distinct strategies** — each with
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
@@ -267,7 +267,7 @@ finsight_agent/
 
 ---
 
-## 🔌 API Reference
+##  API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -284,7 +284,7 @@ finsight_agent/
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 Edit `agent_config.json` or use the dashboard UI to configure:
 
@@ -304,7 +304,7 @@ Edit `agent_config.json` or use the dashboard UI to configure:
 
 ---
 
-## 🗺 Roadmap
+##  Roadmap
 
 - [ ] WebSocket support for real-time dashboard updates
 - [ ] Multi-agent support with different strategies running in parallel
@@ -315,7 +315,7 @@ Edit `agent_config.json` or use the dashboard UI to configure:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
