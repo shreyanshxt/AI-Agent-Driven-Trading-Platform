@@ -24,8 +24,11 @@
 | ![Market Status](assets/market_status.png) | ![Performance](assets/trade_history.png) |
 
 ---
-Dashboard Live view
-![AI Analysis](assets/WhatsApp Video 2026-02-20 at 15.34.23.mp4)
+---
+##  Dashboard Live View
+
+**[Watch the live dashboard video](https://drive.google.com/file/d/VIDEO_ID/view?usp=sharing)**
+---
 ---
 
 ##  About
