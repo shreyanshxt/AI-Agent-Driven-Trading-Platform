@@ -25,7 +25,7 @@
 
 ---
 Dashboard Live view
-![AI Analysis](assets/live_analysis.png)
+![AI Analysis](assets/WhatsApp Video 2026-02-20 at 15.34.23.mp4)
 ---
 
 ##  About
