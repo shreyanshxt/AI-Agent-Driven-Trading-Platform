@@ -25,7 +25,7 @@
 
 ---
 Dashboard Live view
- 
+![AI Analysis](assets/live_analysis.png)
 ---
 
 ##  About
